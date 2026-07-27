@@ -1,0 +1,1504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LandVerify Pro — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --earth-900: #1a1209;
+    --earth-800: #2c1f0e;
+    --earth-700: #3d2c14;
+    --earth-600: #5c4520;
+    --earth-500: #7a5c2e;
+    --gold-400: #c8922a;
+    --gold-300: #e0ac4a;
+    --gold-200: #f0cb7a;
+    --gold-100: #faecd4;
+    --sage-600: #3d6b4f;
+    --sage-500: #4d8762;
+    --sage-400: #62a87a;
+    --sage-200: #b8dbc5;
+    --stone-100: #f5f2ec;
+    --stone-200: #e8e2d6;
+    --stone-300: #cfc8b8;
+    --white: #ffffff;
+    --danger: #c0392b;
+    --warning: #e67e22;
+    --success: #27ae60;
+    --text-primary: #1a1209;
+    --text-secondary: #5c4520;
+    --text-muted: #8a7660;
+    --sidebar-w: 260px;
+    --header-h: 68px;
+    --radius: 12px;
+    --shadow-sm: 0 1px 3px rgba(26,18,9,.08), 0 1px 2px rgba(26,18,9,.06);
+    --shadow-md: 0 4px 16px rgba(26,18,9,.12), 0 2px 6px rgba(26,18,9,.08);
+    --shadow-lg: 0 12px 40px rgba(26,18,9,.18), 0 4px 12px rgba(26,18,9,.10);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--stone-100);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    overflow-x: hidden;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: var(--sidebar-w);
+    background: var(--earth-900);
+    min-height: 100vh;
+    position: fixed;
+    left: 0; top: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    border-right: 1px solid rgba(200,146,42,.15);
+  }
+
+  .sidebar-logo {
+    padding: 24px 22px 20px;
+    border-bottom: 1px solid rgba(200,146,42,.12);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-icon {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--gold-400), var(--gold-200));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .logo-icon svg { width: 22px; height: 22px; fill: var(--earth-900); }
+
+  .logo-text { display: flex; flex-direction: column; }
+  .logo-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    color: var(--white);
+    letter-spacing: -0.3px;
+  }
+  .logo-tag {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--gold-400);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+
+  .sidebar-user {
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(200,146,42,.12);
+  }
+
+  .user-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--sage-500), var(--sage-600));
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--white);
+    flex-shrink: 0;
+    border: 2px solid rgba(200,146,42,.4);
+  }
+
+  .user-info { flex: 1; min-width: 0; }
+  .user-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--white);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .user-role {
+    font-size: 11px;
+    color: var(--gold-400);
+    margin-top: 2px;
+  }
+  .user-status {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+    flex-shrink: 0;
+    box-shadow: 0 0 6px var(--success);
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    padding: 16px 12px;
+    overflow-y: auto;
+  }
+
+  .nav-section-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(200,146,42,.5);
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    padding: 10px 10px 6px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background .18s, color .18s;
+    margin-bottom: 2px;
+    color: rgba(255,255,255,.55);
+    font-size: 13.5px;
+    font-weight: 500;
+    position: relative;
+    text-decoration: none;
+  }
+
+  .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; opacity: .75; }
+
+  .nav-item:hover {
+    background: rgba(200,146,42,.10);
+    color: var(--gold-200);
+  }
+
+  .nav-item.active {
+    background: linear-gradient(90deg, rgba(200,146,42,.20), rgba(200,146,42,.06));
+    color: var(--gold-200);
+    border-left: 3px solid var(--gold-400);
+    padding-left: 9px;
+  }
+
+  .nav-item.active svg { opacity: 1; }
+
+  .nav-badge {
+    margin-left: auto;
+    background: var(--danger);
+    color: var(--white);
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 1px 7px;
+    min-width: 20px;
+    text-align: center;
+  }
+
+  .nav-badge.gold { background: var(--gold-400); color: var(--earth-900); }
+
+  .sidebar-footer {
+    padding: 16px 12px;
+    border-top: 1px solid rgba(200,146,42,.12);
+  }
+
+  .sidebar-footer .nav-item { color: rgba(255,255,255,.4); }
+
+  /* ── MAIN ── */
+  .main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    height: var(--header-h);
+    background: var(--white);
+    border-bottom: 1px solid var(--stone-200);
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+    gap: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .header-title { flex: 1; }
+  .header-title h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.4px;
+  }
+  .header-title p {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 1px;
+  }
+
+  .header-search {
+    display: flex;
+    align-items: center;
+    background: var(--stone-100);
+    border: 1px solid var(--stone-200);
+    border-radius: 10px;
+    padding: 8px 14px;
+    gap: 8px;
+    width: 280px;
+    transition: border-color .2s;
+  }
+  .header-search:focus-within { border-color: var(--gold-400); }
+  .header-search svg { width: 16px; height: 16px; color: var(--text-muted); flex-shrink: 0; }
+  .header-search input {
+    border: none; background: none;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    color: var(--text-primary);
+    outline: none;
+    width: 100%;
+  }
+  .header-search input::placeholder { color: var(--text-muted); }
+
+  .header-actions { display: flex; align-items: center; gap: 10px; }
+
+  .icon-btn {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    border: 1px solid var(--stone-200);
+    background: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+    position: relative;
+  }
+  .icon-btn:hover { background: var(--stone-100); border-color: var(--stone-300); }
+  .icon-btn svg { width: 18px; height: 18px; color: var(--text-secondary); }
+
+  .notif-dot {
+    position: absolute;
+    top: 6px; right: 6px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--danger);
+    border: 2px solid var(--white);
+  }
+
+  .btn-primary {
+    display: flex; align-items: center; gap: 7px;
+    background: linear-gradient(135deg, var(--gold-400), var(--gold-300));
+    color: var(--earth-900);
+    border: none;
+    border-radius: 10px;
+    padding: 9px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(200,146,42,.35);
+    transition: transform .15s, box-shadow .15s;
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(200,146,42,.45); }
+  .btn-primary svg { width: 16px; height: 16px; }
+
+  /* ── CONTENT ── */
+  .content {
+    padding: 28px 32px;
+    flex: 1;
+  }
+
+  /* ── HERO BANNER ── */
+  .hero-banner {
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    height: 210px;
+    margin-bottom: 28px;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1400&q=80');
+    background-size: cover;
+    background-position: center 40%;
+    filter: brightness(.55) saturate(1.1);
+  }
+
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg,
+      rgba(26,18,9,.92) 0%,
+      rgba(26,18,9,.65) 50%,
+      rgba(26,18,9,.15) 100%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 32px 36px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .hero-eyebrow {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 600;
+    color: var(--gold-300);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+  .hero-eyebrow span {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold-300);
+    box-shadow: 0 0 8px var(--gold-300);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; } 50% { opacity: .4; }
+  }
+
+  .hero-headline {
+    font-family: 'Syne', sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.8px;
+    line-height: 1.15;
+    margin-top: 8px;
+  }
+
+  .hero-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,.65);
+    margin-top: 6px;
+    max-width: 480px;
+    line-height: 1.5;
+  }
+
+  .hero-stats {
+    display: flex; gap: 32px;
+    align-items: flex-end;
+  }
+
+  .hero-stat { text-align: left; }
+  .hero-stat-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--gold-200);
+  }
+  .hero-stat-label {
+    font-size: 11px;
+    color: rgba(255,255,255,.55);
+    margin-top: 2px;
+    letter-spacing: .5px;
+  }
+
+  .hero-stat-divider {
+    width: 1px; height: 40px;
+    background: rgba(255,255,255,.15);
+    align-self: center;
+  }
+
+  /* ── STAT CARDS ── */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--stone-200);
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow .2s, transform .2s;
+    cursor: default;
+  }
+  .stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .stat-card.gold::after { background: linear-gradient(90deg, var(--gold-400), var(--gold-200)); }
+  .stat-card.green::after { background: linear-gradient(90deg, var(--sage-500), var(--sage-400)); }
+  .stat-card.red::after { background: linear-gradient(90deg, #c0392b, #e74c3c); }
+  .stat-card.blue::after { background: linear-gradient(90deg, #2980b9, #3498db); }
+
+  .stat-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+
+  .stat-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .stat-icon.gold-bg { background: rgba(200,146,42,.12); }
+  .stat-icon.green-bg { background: rgba(77,135,98,.12); }
+  .stat-icon.red-bg { background: rgba(192,57,43,.10); }
+  .stat-icon.blue-bg { background: rgba(41,128,185,.10); }
+  .stat-icon svg { width: 20px; height: 20px; }
+  .stat-icon.gold-bg svg { color: var(--gold-400); }
+  .stat-icon.green-bg svg { color: var(--sage-500); }
+  .stat-icon.red-bg svg { color: #c0392b; }
+  .stat-icon.blue-bg svg { color: #2980b9; }
+
+  .stat-change {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+  .stat-change.up { background: rgba(39,174,96,.12); color: var(--success); }
+  .stat-change.down { background: rgba(192,57,43,.10); color: var(--danger); }
+  .stat-change.neutral { background: var(--stone-200); color: var(--text-muted); }
+
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-top: 5px;
+    font-weight: 500;
+  }
+
+  .stat-bar-wrap {
+    margin-top: 14px;
+    height: 4px;
+    background: var(--stone-200);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .stat-bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s ease;
+  }
+  .stat-bar.gold { background: linear-gradient(90deg, var(--gold-400), var(--gold-200)); }
+  .stat-bar.green { background: linear-gradient(90deg, var(--sage-500), var(--sage-400)); }
+  .stat-bar.red { background: linear-gradient(90deg, #c0392b, #e74c3c); }
+  .stat-bar.blue { background: linear-gradient(90deg, #2980b9, #3498db); }
+
+  /* ── MAIN GRID ── */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--stone-200);
+    overflow: hidden;
+  }
+
+  .card-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 22px 14px;
+    border-bottom: 1px solid var(--stone-200);
+  }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .card-sub {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .card-action {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gold-400);
+    cursor: pointer;
+    background: none; border: none;
+    font-family: 'Inter', sans-serif;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: background .15s;
+  }
+  .card-action:hover { background: rgba(200,146,42,.10); }
+
+  /* RECENT VERIFICATIONS TABLE */
+  .verif-table { width: 100%; border-collapse: collapse; }
+  .verif-table th {
+    padding: 10px 22px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: .8px;
+    text-transform: uppercase;
+    background: var(--stone-100);
+    border-bottom: 1px solid var(--stone-200);
+  }
+  .verif-table td {
+    padding: 13px 22px;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(230,225,215,.6);
+    vertical-align: middle;
+  }
+  .verif-table tr:last-child td { border-bottom: none; }
+  .verif-table tr:hover td { background: rgba(250,236,212,.25); }
+
+  .parcel-id {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 12.5px;
+    color: var(--text-primary);
+  }
+  .parcel-loc {
+    font-size: 11.5px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  .land-type-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .land-type-badge.agri { background: rgba(77,135,98,.12); color: var(--sage-600); }
+  .land-type-badge.resi { background: rgba(41,128,185,.10); color: #1a5276; }
+  .land-type-badge.comm { background: rgba(200,146,42,.12); color: var(--earth-600); }
+  .land-type-badge.indus { background: rgba(127,140,141,.12); color: #515a5a; }
+
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11.5px; font-weight: 600;
+    padding: 4px 10px; border-radius: 20px;
+  }
+  .status-badge::before {
+    content: ''; width: 6px; height: 6px;
+    border-radius: 50%; flex-shrink: 0;
+  }
+  .status-badge.verified { background: rgba(39,174,96,.12); color: #1e8449; }
+  .status-badge.verified::before { background: var(--success); }
+  .status-badge.pending { background: rgba(230,126,34,.12); color: #784212; }
+  .status-badge.pending::before { background: var(--warning); }
+  .status-badge.disputed { background: rgba(192,57,43,.10); color: #922b21; }
+  .status-badge.disputed::before { background: var(--danger); }
+  .status-badge.review { background: rgba(41,128,185,.10); color: #1a5276; }
+  .status-badge.review::before { background: #2980b9; }
+
+  .owner-cell { display: flex; align-items: center; gap: 9px; }
+  .owner-avatar-sm {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--white);
+    flex-shrink: 0;
+  }
+
+  .action-btns { display: flex; gap: 6px; }
+  .tbl-btn {
+    width: 30px; height: 30px;
+    border-radius: 7px;
+    border: 1px solid var(--stone-200);
+    background: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .tbl-btn:hover { background: var(--stone-100); }
+  .tbl-btn svg { width: 14px; height: 14px; color: var(--text-muted); }
+
+  /* ACTIVITY FEED */
+  .activity-feed { padding: 6px 0; }
+
+  .activity-item {
+    display: flex; gap: 12px;
+    padding: 14px 22px;
+    border-bottom: 1px solid rgba(230,225,215,.5);
+    transition: background .15s;
+  }
+  .activity-item:last-child { border-bottom: none; }
+  .activity-item:hover { background: rgba(250,236,212,.2); }
+
+  .act-icon {
+    width: 34px; height: 34px;
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .act-icon svg { width: 16px; height: 16px; }
+  .act-icon.approved { background: rgba(39,174,96,.12); color: var(--success); }
+  .act-icon.flagged { background: rgba(192,57,43,.10); color: var(--danger); }
+  .act-icon.uploaded { background: rgba(41,128,185,.10); color: #2980b9; }
+  .act-icon.assigned { background: rgba(200,146,42,.12); color: var(--gold-400); }
+  .act-icon.comment { background: rgba(127,140,141,.12); color: #7f8c8d; }
+
+  .act-body { flex: 1; min-width: 0; }
+  .act-title { font-size: 13px; font-weight: 500; color: var(--text-primary); line-height: 1.4; }
+  .act-title strong { font-weight: 700; }
+  .act-meta { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+
+  /* LOWER GRID */
+  .lower-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 340px;
+    gap: 20px;
+  }
+
+  /* MAP CARD */
+  .map-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--stone-200);
+    overflow: hidden;
+  }
+
+  .map-placeholder {
+    position: relative;
+    height: 240px;
+    background-image: url('https://images.unsplash.com/photo-1472145246862-b24cf25495bf?w=800&q=80');
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+  }
+
+  .map-overlay {
+    position: absolute; inset: 0;
+    background: rgba(26,18,9,.25);
+  }
+
+  .map-pin {
+    position: absolute;
+    transform: translate(-50%, -100%);
+    display: flex; flex-direction: column; align-items: center;
+    cursor: pointer;
+    transition: transform .2s;
+  }
+  .map-pin:hover { transform: translate(-50%, -100%) scale(1.15); }
+
+  .map-pin-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    border: 2.5px solid var(--white);
+    box-shadow: 0 2px 8px rgba(0,0,0,.3);
+  }
+
+  .map-pin-label {
+    background: var(--white);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-primary);
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-bottom: 3px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.2);
+    white-space: nowrap;
+  }
+
+  .map-controls {
+    position: absolute;
+    top: 12px; right: 12px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+
+  .map-ctrl-btn {
+    width: 32px; height: 32px;
+    background: rgba(255,255,255,.92);
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+    transition: background .15s;
+    font-family: 'Inter', sans-serif;
+  }
+  .map-ctrl-btn:hover { background: var(--white); }
+
+  .map-legend {
+    padding: 14px 18px;
+    display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11.5px; color: var(--text-muted); font-weight: 500;
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+
+  /* COMPLIANCE CARD */
+  .compliance-list { padding: 0; }
+  .compliance-item {
+    padding: 14px 22px;
+    border-bottom: 1px solid rgba(230,225,215,.5);
+    display: flex; align-items: center; gap: 12px;
+    transition: background .15s;
+  }
+  .compliance-item:last-child { border-bottom: none; }
+  .compliance-item:hover { background: rgba(250,236,212,.2); }
+
+  .comp-icon {
+    width: 36px; height: 36px;
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .comp-icon svg { width: 17px; height: 17px; }
+  .comp-icon.ok { background: rgba(39,174,96,.12); color: var(--success); }
+  .comp-icon.warn { background: rgba(230,126,34,.12); color: var(--warning); }
+  .comp-icon.fail { background: rgba(192,57,43,.10); color: var(--danger); }
+
+  .comp-body { flex: 1; }
+  .comp-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+  .comp-desc { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  .comp-score {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+  }
+  .comp-score.ok { color: var(--success); }
+  .comp-score.warn { color: var(--warning); }
+  .comp-score.fail { color: var(--danger); }
+
+  /* TASKS CARD */
+  .tasks-list { padding: 0; }
+  .task-item {
+    padding: 12px 22px;
+    border-bottom: 1px solid rgba(230,225,215,.5);
+    display: flex; align-items: flex-start; gap: 10px;
+    transition: background .15s;
+  }
+  .task-item:last-child { border-bottom: none; }
+  .task-item:hover { background: rgba(250,236,212,.2); }
+
+  .task-check {
+    width: 18px; height: 18px;
+    border-radius: 5px;
+    border: 2px solid var(--stone-300);
+    margin-top: 2px; flex-shrink: 0;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color .15s, background .15s;
+  }
+  .task-check.done {
+    background: var(--sage-500);
+    border-color: var(--sage-500);
+  }
+  .task-check.done::after {
+    content: '';
+    width: 5px; height: 9px;
+    border: 2px solid var(--white);
+    border-top: none; border-left: none;
+    transform: rotate(45deg) translateY(-1px);
+    display: block;
+  }
+
+  .task-body { flex: 1; }
+  .task-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.4;
+  }
+  .task-item.done-task .task-title {
+    text-decoration: line-through;
+    color: var(--text-muted);
+  }
+  .task-due {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 3px;
+  }
+  .task-due.overdue { color: var(--danger); font-weight: 600; }
+
+  .task-priority {
+    font-size: 10px; font-weight: 700;
+    padding: 2px 7px; border-radius: 20px;
+    margin-top: 2px; align-self: flex-start;
+    flex-shrink: 0;
+  }
+  .task-priority.high { background: rgba(192,57,43,.10); color: var(--danger); }
+  .task-priority.med { background: rgba(230,126,34,.12); color: var(--warning); }
+  .task-priority.low { background: rgba(39,174,96,.12); color: var(--success); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--stone-300); border-radius: 10px; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════ SIDEBAR ══════════════════════ -->
+<aside class="sidebar">
+
+  <div class="sidebar-logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    </div>
+    <div class="logo-text">
+      <span class="logo-name">LandVerify</span>
+      <span class="logo-tag">Pro Platform</span>
+    </div>
+  </div>
+
+  <div class="sidebar-user">
+    <div class="user-avatar">JM</div>
+    <div class="user-info">
+      <div class="user-name">James Mwangi</div>
+      <div class="user-role">Senior Land Officer</div>
+    </div>
+    <div class="user-status"></div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Main</div>
+
+    <a class="nav-item active" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </a>
+
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      Verifications
+      <span class="nav-badge">14</span>
+    </a>
+
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Parcels Registry
+    </a>
+
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Search Land
+    </a>
+
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0116 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Map View
+    </a>
+
+    <div class="nav-section-label" style="margin-top:8px">Management</div>
+
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Documents
+      <span class="nav-badge gold">3</span>
+    </a>
+
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      Applicants
+    </a>
+
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Reports & Analytics
+    </a>
+
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg>
+      Disputes
+      <span class="nav-badge">2</span>
+    </a>
+
+    <div class="nav-section-label" style="margin-top:8px">System</div>
+
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+      Audit Logs
+    </a>
+
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Settings
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Sign Out
+    </a>
+  </div>
+
+</aside>
+
+<!-- ══════════════════════ MAIN ══════════════════════ -->
+<main class="main">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-title">
+      <h1>Overview Dashboard</h1>
+      <p>Wednesday, 11 June 2026 · Nakuru County Registry</p>
+    </div>
+
+    <div class="header-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Search parcel ID, owner, location…"/>
+    </div>
+
+    <div class="header-actions">
+      <button class="icon-btn" title="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        <span class="notif-dot"></span>
+      </button>
+      <button class="icon-btn" title="Messages">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      </button>
+      <button class="icon-btn" title="Help">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </button>
+      <button class="btn-primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New Verification
+      </button>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- HERO BANNER -->
+    <div class="hero-banner">
+      <div class="hero-bg"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <div>
+          <div class="hero-eyebrow"><span></span> Live Registry · Nakuru County</div>
+          <div class="hero-headline">Land Verification<br>Command Center</div>
+          <div class="hero-sub">Manage, verify, and authenticate land title deeds with full chain-of-custody tracking and geospatial mapping.</div>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-val">4,821</div>
+            <div class="hero-stat-label">Parcels Registered</div>
+          </div>
+          <div class="hero-stat-divider"></div>
+          <div class="hero-stat">
+            <div class="hero-stat-val">98.4%</div>
+            <div class="hero-stat-label">Verification Accuracy</div>
+          </div>
+          <div class="hero-stat-divider"></div>
+          <div class="hero-stat">
+            <div class="hero-stat-val">3.2 days</div>
+            <div class="hero-stat-label">Avg. Processing Time</div>
+          </div>
+          <div class="hero-stat-divider"></div>
+          <div class="hero-stat">
+            <div class="hero-stat-val">127</div>
+            <div class="hero-stat-label">Active Officers</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="stat-grid">
+      <div class="stat-card gold">
+        <div class="stat-header">
+          <div class="stat-icon gold-bg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          </div>
+          <span class="stat-change up">↑ 12.4%</span>
+        </div>
+        <div class="stat-value">1,284</div>
+        <div class="stat-label">Verified This Month</div>
+        <div class="stat-bar-wrap"><div class="stat-bar gold" style="width:78%"></div></div>
+      </div>
+
+      <div class="stat-card red">
+        <div class="stat-header">
+          <div class="stat-icon red-bg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </div>
+          <span class="stat-change down">↓ 3.1%</span>
+        </div>
+        <div class="stat-value">47</div>
+        <div class="stat-label">Disputes Raised</div>
+        <div class="stat-bar-wrap"><div class="stat-bar red" style="width:22%"></div></div>
+      </div>
+
+      <div class="stat-card green">
+        <div class="stat-header">
+          <div class="stat-icon green-bg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          </div>
+          <span class="stat-change up">↑ 8.7%</span>
+        </div>
+        <div class="stat-value">342</div>
+        <div class="stat-label">Transfers Processed</div>
+        <div class="stat-bar-wrap"><div class="stat-bar green" style="width:64%"></div></div>
+      </div>
+
+      <div class="stat-card blue">
+        <div class="stat-header">
+          <div class="stat-icon blue-bg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <span class="stat-change neutral">→ 0.2%</span>
+        </div>
+        <div class="stat-value">89</div>
+        <div class="stat-label">Pending Review</div>
+        <div class="stat-bar-wrap"><div class="stat-bar blue" style="width:41%"></div></div>
+      </div>
+    </div>
+
+    <!-- MAIN GRID -->
+    <div class="main-grid">
+
+      <!-- RECENT VERIFICATIONS TABLE -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Recent Verifications</div>
+            <div class="card-sub">Latest land parcel verification requests</div>
+          </div>
+          <button class="card-action">View All →</button>
+        </div>
+        <table class="verif-table">
+          <thead>
+            <tr>
+              <th>Parcel Details</th>
+              <th>Land Use</th>
+              <th>Area (Ha)</th>
+              <th>Owner</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="parcel-id">NKR-2024-00847</div>
+                <div class="parcel-loc">📍 Lanet, Nakuru East</div>
+              </td>
+              <td><span class="land-type-badge resi">Residential</span></td>
+              <td><strong>0.45</strong></td>
+              <td>
+                <div class="owner-cell">
+                  <div class="owner-avatar-sm" style="background:#1a5276">KW</div>
+                  Kamau Wanjiru
+                </div>
+              </td>
+              <td><span class="status-badge verified">Verified</span></td>
+              <td style="color:var(--text-muted);font-size:12px">10 Jun 2026</td>
+              <td>
+                <div class="action-btns">
+                  <button class="tbl-btn" title="View">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                  <button class="tbl-btn" title="Download">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="parcel-id">NKR-2024-00831</div>
+                <div class="parcel-loc">📍 Bahati, Nakuru North</div>
+              </td>
+              <td><span class="land-type-badge agri">Agricultural</span></td>
+              <td><strong>12.80</strong></td>
+              <td>
+                <div class="owner-cell">
+                  <div class="owner-avatar-sm" style="background:#4d8762">AO</div>
+                  Akinyi Odhiambo
+                </div>
+              </td>
+              <td><span class="status-badge pending">Pending</span></td>
+              <td style="color:var(--text-muted);font-size:12px">09 Jun 2026</td>
+              <td>
+                <div class="action-btns">
+                  <button class="tbl-btn" title="View">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                  <button class="tbl-btn" title="Edit">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="parcel-id">NKR-2024-00819</div>
+                <div class="parcel-loc">📍 CBD, Nakuru Town</div>
+              </td>
+              <td><span class="land-type-badge comm">Commercial</span></td>
+              <td><strong>0.18</strong></td>
+              <td>
+                <div class="owner-cell">
+                  <div class="owner-avatar-sm" style="background:#7d3c98">PN</div>
+                  Peter Njoroge
+                </div>
+              </td>
+              <td><span class="status-badge disputed">Disputed</span></td>
+              <td style="color:var(--text-muted);font-size:12px">08 Jun 2026</td>
+              <td>
+                <div class="action-btns">
+                  <button class="tbl-btn" title="View">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                  <button class="tbl-btn" title="Flag">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="parcel-id">NKR-2024-00804</div>
+                <div class="parcel-loc">📍 Molo, Nakuru West</div>
+              </td>
+              <td><span class="land-type-badge agri">Agricultural</span></td>
+              <td><strong>34.60</strong></td>
+              <td>
+                <div class="owner-cell">
+                  <div class="owner-avatar-sm" style="background:#c8922a">FM</div>
+                  Faith Mutua
+                </div>
+              </td>
+              <td><span class="status-badge review">In Review</span></td>
+              <td style="color:var(--text-muted);font-size:12px">07 Jun 2026</td>
+              <td>
+                <div class="action-btns">
+                  <button class="tbl-btn" title="View">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                  <button class="tbl-btn" title="Approve">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="parcel-id">NKR-2024-00793</div>
+                <div class="parcel-loc">📍 Naivasha Road, Nakuru</div>
+              </td>
+              <td><span class="land-type-badge indus">Industrial</span></td>
+              <td><strong>5.22</strong></td>
+              <td>
+                <div class="owner-cell">
+                  <div class="owner-avatar-sm" style="background:#1abc9c">GO</div>
+                  Grace Otieno
+                </div>
+              </td>
+              <td><span class="status-badge verified">Verified</span></td>
+              <td style="color:var(--text-muted);font-size:12px">06 Jun 2026</td>
+              <td>
+                <div class="action-btns">
+                  <button class="tbl-btn" title="View">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                  <button class="tbl-btn" title="Download">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ACTIVITY FEED -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Activity Feed</div>
+            <div class="card-sub">Real-time registry updates</div>
+          </div>
+          <button class="card-action">All →</button>
+        </div>
+        <div class="activity-feed">
+          <div class="activity-item">
+            <div class="act-icon approved">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div class="act-body">
+              <div class="act-title"><strong>NKR-00847</strong> verified by J. Mwangi</div>
+              <div class="act-meta">2 minutes ago · Title deed authenticated</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="act-icon flagged">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div class="act-body">
+              <div class="act-title">Dispute filed on <strong>NKR-00819</strong></div>
+              <div class="act-meta">18 minutes ago · Competing ownership claim</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="act-icon uploaded">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <div class="act-body">
+              <div class="act-title">Survey documents uploaded for <strong>NKR-00831</strong></div>
+              <div class="act-meta">35 minutes ago · 4 files attached</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="act-icon assigned">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+            </div>
+            <div class="act-body">
+              <div class="act-title"><strong>NKR-00804</strong> assigned to E. Kariuki</div>
+              <div class="act-meta">1 hour ago · Priority review requested</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="act-icon comment">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            </div>
+            <div class="act-body">
+              <div class="act-title">Comment added on <strong>NKR-00793</strong></div>
+              <div class="act-meta">2 hours ago · Geo-coordinates confirmed</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="act-icon approved">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div class="act-body">
+              <div class="act-title">Transfer completed: <strong>NKR-00788</strong></div>
+              <div class="act-meta">3 hours ago · New title deed issued</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="act-icon uploaded">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <div class="act-body">
+              <div class="act-title">New application: <strong>NKR-00851</strong></div>
+              <div class="act-meta">4 hours ago · Awaiting initial screening</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOWER GRID -->
+    <div class="lower-grid">
+
+      <!-- MAP CARD -->
+      <div class="map-card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Parcel Map — Nakuru County</div>
+            <div class="card-sub">Interactive geospatial overview</div>
+          </div>
+          <button class="card-action">Full Map →</button>
+        </div>
+        <div class="map-placeholder">
+          <div class="map-overlay"></div>
+          <div class="map-pin" style="left:38%;top:45%">
+            <div class="map-pin-label">NKR-00847</div>
+            <div class="map-pin-dot" style="background:#27ae60"></div>
+          </div>
+          <div class="map-pin" style="left:62%;top:30%">
+            <div class="map-pin-label">NKR-00831</div>
+            <div class="map-pin-dot" style="background:#e67e22"></div>
+          </div>
+          <div class="map-pin" style="left:48%;top:60%">
+            <div class="map-pin-label">NKR-00819</div>
+            <div class="map-pin-dot" style="background:#c0392b"></div>
+          </div>
+          <div class="map-pin" style="left:25%;top:55%">
+            <div class="map-pin-label">NKR-00804</div>
+            <div class="map-pin-dot" style="background:#2980b9"></div>
+          </div>
+          <div class="map-pin" style="left:72%;top:55%">
+            <div class="map-pin-label">NKR-00793</div>
+            <div class="map-pin-dot" style="background:#27ae60"></div>
+          </div>
+          <div class="map-controls">
+            <button class="map-ctrl-btn">+</button>
+            <button class="map-ctrl-btn">−</button>
+            <button class="map-ctrl-btn" style="font-size:12px">⊕</button>
+          </div>
+        </div>
+        <div class="map-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#27ae60"></div> Verified</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#e67e22"></div> Pending</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#c0392b"></div> Disputed</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#2980b9"></div> In Review</div>
+        </div>
+      </div>
+
+      <!-- COMPLIANCE CARD -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Compliance Checks</div>
+            <div class="card-sub">Registry health indicators</div>
+          </div>
+        </div>
+        <div class="compliance-list">
+          <div class="compliance-item">
+            <div class="comp-icon ok">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div class="comp-body">
+              <div class="comp-name">Title Deed Integrity</div>
+              <div class="comp-desc">Cryptographic validation</div>
+            </div>
+            <div class="comp-score ok">99.1%</div>
+          </div>
+          <div class="compliance-item">
+            <div class="comp-icon ok">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="comp-body">
+              <div class="comp-name">Geo-coordinate Accuracy</div>
+              <div class="comp-desc">GPS boundary matching</div>
+            </div>
+            <div class="comp-score ok">97.8%</div>
+          </div>
+          <div class="compliance-item">
+            <div class="comp-icon warn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div class="comp-body">
+              <div class="comp-name">Document Completeness</div>
+              <div class="comp-desc">14 parcels with missing docs</div>
+            </div>
+            <div class="comp-score warn">84.3%</div>
+          </div>
+          <div class="compliance-item">
+            <div class="comp-icon ok">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            </div>
+            <div class="comp-body">
+              <div class="comp-name">Ownership Chain</div>
+              <div class="comp-desc">Historical transfer audit</div>
+            </div>
+            <div class="comp-score ok">96.5%</div>
+          </div>
+          <div class="compliance-item">
+            <div class="comp-icon fail">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            </div>
+            <div class="comp-body">
+              <div class="comp-name">Survey Reports Pending</div>
+              <div class="comp-desc">31 overdue survey filings</div>
+            </div>
+            <div class="comp-score fail">62.1%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TASKS CARD -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">My Tasks</div>
+            <div class="card-sub">Today's action items</div>
+          </div>
+          <button class="card-action">Add +</button>
+        </div>
+        <div class="tasks-list">
+          <div class="task-item">
+            <div class="task-check"></div>
+            <div class="task-body">
+              <div class="task-title">Review NKR-00831 agricultural survey</div>
+              <div class="task-due overdue">⚠ Overdue · Was due 9 Jun</div>
+            </div>
+            <div class="task-priority high">High</div>
+          </div>
+          <div class="task-item">
+            <div class="task-check"></div>
+            <div class="task-body">
+              <div class="task-title">Resolve dispute for NKR-00819</div>
+              <div class="task-due">Due today · 5:00 PM</div>
+            </div>
+            <div class="task-priority high">High</div>
+          </div>
+          <div class="task-item">
+            <div class="task-check"></div>
+            <div class="task-body">
+              <div class="task-title">Upload signed title deeds batch #14</div>
+              <div class="task-due">Due today · 4:00 PM</div>
+            </div>
+            <div class="task-priority med">Med</div>
+          </div>
+          <div class="task-item done-task">
+            <div class="task-check done"></div>
+            <div class="task-body">
+              <div class="task-title">Verify geo-coordinates for NKR-00793</div>
+              <div class="task-due">Completed 10:30 AM</div>
+            </div>
+            <div class="task-priority low">Low</div>
+          </div>
+          <div class="task-item done-task">
+            <div class="task-check done"></div>
+            <div class="task-body">
+              <div class="task-title">Send transfer notice to applicant #0847</div>
+              <div class="task-due">Completed 09:15 AM</div>
+            </div>
+            <div class="task-priority low">Low</div>
+          </div>
+          <div class="task-item">
+            <div class="task-check"></div>
+            <div class="task-body">
+              <div class="task-title">Audit compliance report for Q2 2026</div>
+              <div class="task-due">Due 14 Jun 2026</div>
+            </div>
+            <div class="task-priority med">Med</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

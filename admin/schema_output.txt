@@ -1,0 +1,21 @@
+Tables_in_map3sa
+administrators
+land_cases
+land_images
+land_records
+lease_rejected_requests
+lease_requests
+owners
+ownership_history
+purchase_requests
+restrictions
+survey_plans
+users
+verification_logs
+voiceofthepeople
+Table	Create Table
+land_records	CREATE TABLE `land_records` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `title_number` varchar(50) NOT NULL,\n  `owner_id` int(11) NOT NULL,\n  `parcel_number` varchar(50) NOT NULL,\n  `block_number` varchar(50) DEFAULT NULL,\n  `county` varchar(100) NOT NULL,\n  `sub_county` varchar(100) NOT NULL,\n  `ward` varchar(100) NOT NULL,\n  `physical_location` varchar(255) NOT NULL,\n  `latitude` decimal(10,8) DEFAULT NULL,\n  `longitude` decimal(11,8) DEFAULT NULL,\n  `land_size` decimal(10,2) NOT NULL,\n  `land_use` enum('Agricultural','Residential','Commercial','Industrial','Mixed Use') NOT NULL,\n  `registration_date` date NOT NULL,\n  `status` enum('Active','Transferred','Suspended','Government Land','Public Land','Reserved','Fraud Investigation','Inactive') DEFAULT 'Active',\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),\n  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),\n  `record_type` enum('owned','purchasing','leasing','selling') NOT NULL DEFAULT 'owned',\n  `land_category` varchar(100) DEFAULT NULL,\n  `owner` varchar(150) DEFAULT NULL,\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `title_number` (`title_number`),\n  KEY `fk_land_user` (`owner_id`),\n  CONSTRAINT `fk_land_user` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE\n) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+Table	Create Table
+owners	CREATE TABLE `owners` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `firstname` varchar(100) NOT NULL,\n  `lastname` varchar(100) NOT NULL,\n  `national_id` varchar(20) NOT NULL,\n  `phone` varchar(20) DEFAULT NULL,\n  `email` varchar(100) DEFAULT NULL,\n  `address` text DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),\n  PRIMARY KEY (`id`),\n  UNIQUE KEY `national_id` (`national_id`)\n) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+Table	Create Table
+users	CREATE TABLE `users` (\n  `id` int(11) NOT NULL AUTO_INCREMENT,\n  `firstname` varchar(100) NOT NULL,\n  `middlename` varchar(100) DEFAULT NULL,\n  `lastname` varchar(100) NOT NULL,\n  `doctype` varchar(50) NOT NULL,\n  `docnumber` varchar(100) NOT NULL,\n  `email` varchar(255) DEFAULT NULL,\n  `phone` varchar(50) DEFAULT NULL,\n  `accounttype` varchar(50) DEFAULT NULL,\n  `password` varchar(255) DEFAULT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),\n  `front_document` varchar(255) DEFAULT NULL,\n  `back_document` varchar(255) DEFAULT NULL,\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci

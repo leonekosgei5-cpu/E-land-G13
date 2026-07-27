@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - E-Land</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="logo">E-Land</div>
+        <ul class="nav-menu">
+          <li><a href="homepage.php" class="nav-link">Home</a></li>
+          <li><a href="my-land.php" class="nav-link">My Land</a></li>
+          <li><a href="land-on-sale.php" class="nav-link">Land on Sale</a></li>
+          <li>
+            <a href="land-on-lease.php" class="nav-link">Land on Lease</a>
+          </li>
+          <li><a href="about.php" class="nav-link">About</a></li>
+        </ul>
+        <div class="auth-buttons">
+          <div class="auth-buttons">
+           <a href="login.html" class="btn-login">Login</a>
+           <a href="register.html" class="btn-register">Register</a>
+           </div>
+        </div>
+      </div>
+    </nav>
+
+
+    <main
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 80vh;
+        padding: 2rem;
+      "
+    >
+      <form
+        action="login.php"
+        method="POST"
+        style="max-width: 400px; width: 100%"
+      >
+        <h1
+          style="
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--dark-color);
+          "
+        >
+          Login to Your Account
+        </h1>
+
+        <!-- Step 1: Document Type Selection -->
+        <div id="login-step1-doctype">
+          <div class="form-group">
+            <label
+              style="
+                font-size: 1.1rem;
+                font-weight: 600;
+                color: var(--dark-color);
+              "
+              >Select Your Document Type
+              <span style="color: #e74c3c">*</span></label
+            >
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                margin-top: 1rem;
+              "
+            >
+              <label
+                style="
+                  display: flex;
+                  align-items: center;
+                  cursor: pointer;
+                  padding: 1rem;
+                  border: 2px solid var(--light-color);
+                  border-radius: 8px;
+                  transition: all 0.3s;
+                "
+              >
+                <input
+                  type="radio"
+                  name="doctype"
+                  value="id"
+                  onchange="proceedToLoginForm('id')"
+                  style="margin-right: 1rem; width: 20px; height: 20px"
+                />
+                <span style="font-size: 1rem">National ID</span>
+              </label>
+              <label
+                style="
+                  display: flex;
+                  align-items: center;
+                  cursor: pointer;
+                  padding: 1rem;
+                  border: 2px solid var(--light-color);
+                  border-radius: 8px;
+                  transition: all 0.3s;
+                "
+              >
+                <input
+                  type="radio"
+                  name="doctype"
+                  value="passport"
+                  onchange="proceedToLoginForm('passport')"
+                  style="margin-right: 1rem; width: 20px; height: 20px"
+                />
+                <span style="font-size: 1rem">Passport</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Login Form -->
+        <div id="login-step2-form" style="display: none">
+
+```
+<div class="form-group">
+    <label for="email">
+        Email Address <span style="color: #e74c3c;">*</span>
+    </label>
+    <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder="your@email.com"
+        required
+    />
+</div>
+
+<div class="form-group">
+    <label for="password">
+        Password <span style="color: #e74c3c;">*</span>
+    </label>
+    <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Enter your password"
+        required
+    />
+</div>
+
+<div class="form-group">
+    <input type="checkbox" id="remember" name="remember" />
+    <label for="remember" style="display: inline; margin-left: 0.5rem;">
+        Remember me
+    </label>
+</div>
+
+<button
+    type="submit"
+    style="width: 100%; margin-bottom: 1rem;">
+    Login
+</button>
+
+<div style="text-align: center;">
+    <p>
+        Don't have an account?
+        <a href="register.html" style="color: var(--primary-color);">
+            Register here
+        </a>
+    </p>
+
+    <p>
+        <a href="forgot-password.html"
+           style="color: var(--primary-color); font-size: 0.9rem;">
+           Forgot your password?
+        </a>
+    </p>
+</div>
+```
+
+</div>
+
+        </div>
+      </form>
+    </main>
+
+    <script>
+      function proceedToLoginForm(doctype) {
+        document.getElementById("login-step1-doctype").style.display = "none";
+        document.getElementById("login-step2-form").style.display = "block";
+        // Set the selected document type in the hidden radio buttons
+        document.querySelector(
+          'input[name="doctype"][value="' + doctype + '"]',
+        ).checked = true;
+      }
+    </script>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2026 E-Land. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="about.php">About</a>
+          <a href="#">Contact</a>
+          <a href="#">Privacy Policy</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
